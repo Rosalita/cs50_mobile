@@ -11,30 +11,36 @@ const uncheckedCountSpan = document.getElementById('unchecked-count')
 
 function newTodo() {
 
-  console.log("***")
-  console.log(this)
-
-  // get user input for the todo item
-
   const thingToDo = prompt("What would you like to do?", "something");
 
   if (thingToDo !== null && thingToDo !== "") {
 
-    document.getElementById('todo-list').innerHTML += ('<li>' +
-      thingToDo + '<input type="checkbox" id="box" onclick="boxClick()"><li>');
-
-
+    increment('item-count')
+    increment('unchecked-count')
+  
+    document.getElementById('todo-list').innerHTML += (
+      '<li>' + thingToDo + '<input type="checkbox" id="box" onclick="boxClick(this)"><li>');
   }
-  // increase the item count
-  //alert('New TODO button clicked!')
 }
 
 
-function boxClick() {
-  console.log("item was clicked");
-  if (document.getElementById('box').checked === true) {
-    console.log("checked")
+function boxClick(checkbox) {
+  if (checkbox.checked === true) {
+    decrement('unchecked-count')
   } else {
-    console.log("unchecked")
+    increment('unchecked-count')
+
   }
+}
+
+function increment(elementId){
+  let total = document.getElementById(elementId).innerHTML
+  total ++
+  document.getElementById(elementId).innerHTML = total
+}
+
+function decrement(elementId){
+  let total = document.getElementById(elementId).innerHTML
+  total --
+  document.getElementById(elementId).innerHTML = total
 }
