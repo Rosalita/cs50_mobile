@@ -9,6 +9,8 @@ const list = document.getElementById('todo-list')
 const itemCountSpan = document.getElementById('item-count')
 const uncheckedCountSpan = document.getElementById('unchecked-count')
 
+let count = 0;
+
 function newTodo() {
 
   const thingToDo = prompt("What would you like to do?", "something");
@@ -17,30 +19,32 @@ function newTodo() {
 
     increment('item-count')
     increment('unchecked-count')
-  
-    document.getElementById('todo-list').innerHTML += (
-      '<li>' + thingToDo + '<input type="checkbox" id="box" onclick="boxClick(this)"><li>');
+
+    const newElement = document.createElement('li');
+    newElement.innerHTML = '<li>' + thingToDo + '<input type="checkbox" id="checkbox-' + count + '" onclick="boxClick(this)"></li>'
+    list.appendChild(newElement);
+
+    count++
+
   }
 }
-
 
 function boxClick(checkbox) {
   if (checkbox.checked === true) {
     decrement('unchecked-count')
   } else {
     increment('unchecked-count')
-
   }
 }
 
-function increment(elementId){
+function increment(elementId) {
   let total = document.getElementById(elementId).innerHTML
-  total ++
+  total++
   document.getElementById(elementId).innerHTML = total
 }
 
-function decrement(elementId){
+function decrement(elementId) {
   let total = document.getElementById(elementId).innerHTML
-  total --
+  total--
   document.getElementById(elementId).innerHTML = total
 }
