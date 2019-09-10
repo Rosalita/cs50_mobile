@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { Count } from './Count.js'
 
 export default class App extends React.Component {
 
