@@ -48,12 +48,10 @@ export default class App extends React.Component {
 
   constructor(props){
     super(props)
-    this.togglePause = this.togglePause.bind(this)
     this.state = {
       mode: "work",
       isPaused: false,
       count: 1500,
-      togglePause: this.togglePause
     }
   }
 
