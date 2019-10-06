@@ -23,7 +23,7 @@ class PauseButton extends React.Component{
    constructor(props){
     super(props)
     this.state = {
-      text: "start",
+      text: "stop",
     }
   }
   
@@ -40,6 +40,7 @@ class PauseButton extends React.Component{
     } else {
       this.setState(prevState => ({text: "start"}))
     }
+    this.props.togglePause()
   }
 }
 
@@ -52,17 +53,16 @@ export default class App extends React.Component {
       mode: "work",
       isPaused: false,
       count: 1500,
+      togglePause: this.togglePause
     }
   }
 
-togglePause(){
-
+togglePause = () => {
     if (this.state.isPaused === false){
       this.setState(prevState => ({isPaused: true}))
     } else {
       this.setState(prevState => ({isPaused: false}))
     }
-
 }
 
   componentDidMount(){
@@ -70,7 +70,9 @@ togglePause(){
   }
 
   decrementCount = () => {
-    this.setState(prevState => ({count: prevState.count -1}))
+    if (this.state.isPaused === false){
+      this.setState(prevState => ({count: prevState.count -1}))
+    }
   }
 
   toggleMode = () => {
@@ -87,8 +89,7 @@ togglePause(){
         <Text style={styles.titleText}>Pomodoro Timer</Text>
         <Text> Current mode : {this.state.mode}</Text>
         <Count count={this.state.count} isPaused={this.state.isPaused} />
-        <PauseButton />
-        <Button title="change isPaused" onPress={() => this.togglePause()}/>
+        <PauseButton togglePause={this.togglePause}/>
         <Button title="test - change mode" onPress={() => this.toggleMode()}/>
       </View>
     );
