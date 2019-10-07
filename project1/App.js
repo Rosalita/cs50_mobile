@@ -2,15 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 class Count extends React.Component{
-  shouldComponentUpdate(nextProps){
-    // check if timer is paused
-    return !(nextProps.isPaused)
-  }
-
-  componentDidUpdate(){
-    // check if timer reached 0
-  }
-
   render(){
     return(
       <Text style={styles.count}>{this.props.count}</Text>
@@ -19,7 +10,6 @@ class Count extends React.Component{
 }
 
 class PauseButton extends React.Component{
-
    constructor(props){
     super(props)
     this.state = {
@@ -34,9 +24,8 @@ class PauseButton extends React.Component{
   }
 
   onPress = () => {
-     if (this.state.text === "start"){
+    if (this.state.text === "start"){
       this.setState(prevState => ({text: "stop"}))
-    
     } else {
       this.setState(prevState => ({text: "start"}))
     }
@@ -48,10 +37,13 @@ export default class App extends React.Component {
 
   constructor(props){
     super(props)
+
     this.state = {
       mode: "work",
       isPaused: false,
-      count: 1500,
+      count: 10,
+      workTime: 10,
+      restTime: 20,
     }
   }
 
@@ -71,13 +63,26 @@ togglePause = () => {
     if (this.state.isPaused === false){
       this.setState(prevState => ({count: prevState.count -1}))
     }
+    if (this.state.count === 0){
+      this.toggleMode()
+    }
   }
 
   toggleMode = () => {
     if (this.state.mode === "work"){
       this.setState(prevState => ({mode: "rest"}))
+      this.setState(prevState => ({count: this.state.restTime}))
     } else {
       this.setState(prevState => ({mode: "work"}))
+      this.setState(prevState => ({count: this.state.workTime}))
+    }
+  }
+
+  resetCount = () => {
+    if (this.state.mode === "work"){
+       this.setState(prevState => ({count: this.state.workTime}))
+    } else {
+       this.setState(prevState => ({count: this.state.restTime}))
     }
   }
 
@@ -87,8 +92,10 @@ togglePause = () => {
         <Text style={styles.titleText}>Pomodoro Timer</Text>
         <Text> Current mode : {this.state.mode}</Text>
         <Count count={this.state.count} isPaused={this.state.isPaused} />
-        <PauseButton togglePause={this.togglePause}/>
-        <Button title="test - change mode" onPress={() => this.toggleMode()}/>
+        <View style={styles.buttons}> 
+         <PauseButton togglePause={this.togglePause}/> 
+          <Button title="reset" onPress={() => this.resetCount()}/>
+        </View>
       </View>
     );
   }
@@ -106,6 +113,9 @@ const styles = StyleSheet.create({
   },
   count: {
     fontSize: 48,
+  },
+  buttons: {
+    flexDirection: "row",
   },
 });
 
