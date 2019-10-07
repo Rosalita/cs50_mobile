@@ -90,12 +90,29 @@ export default class App extends React.Component {
     }
   }
 
+secondsToTimeString = (seconds) => {
+    const secs = seconds % 60
+    const mins = (seconds - secs) / 60
+   
+    let strSecs = secs.toString()
+    let strMins = mins.toString()
+
+    if (secs < 10) {
+    strSecs = "0" + strSecs
+    }
+    if (mins < 10) {
+    strMins = "0" + strMins
+    }
+
+    return strMins + ":" + strSecs
+}
+
   render(){
     return (
       <View style={styles.appContainer}>
         <Text style={styles.titleText}>Pomodoro Timer</Text>
         <Text style={styles.modeText}> Current mode : {this.state.mode}</Text>
-        <Count count={this.state.count} isPaused={this.state.isPaused} />
+        <Count count={this.secondsToTimeString(this.state.count)} isPaused={this.state.isPaused} />
         <View style={styles.buttons}> 
           <PauseButton togglePause={this.togglePause}/> 
           <Button title="reset" color="#00096b" onPress={() => this.resetCount()}/>
