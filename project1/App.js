@@ -1,6 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
+
+const workTime = 1500
+const restTime = 300
+
 class Count extends React.Component{
   render(){
     return(
@@ -41,9 +45,7 @@ export default class App extends React.Component {
     this.state = {
       mode: "work",
       isPaused: false,
-      count: 10,
-      workTime: 10,
-      restTime: 20,
+      count: workTime,
     }
   }
 
@@ -71,18 +73,18 @@ togglePause = () => {
   toggleMode = () => {
     if (this.state.mode === "work"){
       this.setState(prevState => ({mode: "rest"}))
-      this.setState(prevState => ({count: this.state.restTime}))
+      this.setState(prevState => ({count: restTime}))
     } else {
       this.setState(prevState => ({mode: "work"}))
-      this.setState(prevState => ({count: this.state.workTime}))
+      this.setState(prevState => ({count: workTime}))
     }
   }
 
   resetCount = () => {
     if (this.state.mode === "work"){
-       this.setState(prevState => ({count: this.state.workTime}))
+       this.setState(prevState => ({count: workTime}))
     } else {
-       this.setState(prevState => ({count: this.state.restTime}))
+       this.setState(prevState => ({count: restTime}))
     }
   }
 
