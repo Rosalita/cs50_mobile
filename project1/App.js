@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-
 const workTime = 1500
 const restTime = 300
 
@@ -18,20 +17,23 @@ class PauseButton extends React.Component{
     super(props)
     this.state = {
       text: "stop",
+      color: "#9c0000"
     }
   }
   
   render(){
     return(
-        <Button title={this.state.text} onPress={() => this.onPress()}/>
+        <Button title={this.state.text} color={this.state.color} onPress={() => this.onPress()}/>
     )
   }
 
   onPress = () => {
     if (this.state.text === "start"){
       this.setState(prevState => ({text: "stop"}))
+      this.setState(prevState => ({color: "#9c0000"}))
     } else {
       this.setState(prevState => ({text: "start"}))
+      this.setState(prevState => ({color: "#004a00"}))
     }
     this.props.togglePause()
   }
@@ -43,19 +45,19 @@ export default class App extends React.Component {
     super(props)
 
     this.state = {
-      mode: "work",
+      mode: "Work",
       isPaused: false,
       count: workTime,
     }
   }
 
-togglePause = () => {
+  togglePause = () => {
     if (this.state.isPaused === false){
       this.setState(prevState => ({isPaused: true}))
     } else {
       this.setState(prevState => ({isPaused: false}))
     }
-}
+  }
 
   componentDidMount(){
     setInterval(this.decrementCount, 1000)
@@ -71,17 +73,17 @@ togglePause = () => {
   }
 
   toggleMode = () => {
-    if (this.state.mode === "work"){
-      this.setState(prevState => ({mode: "rest"}))
+    if (this.state.mode === "Work"){
+      this.setState(prevState => ({mode: "Rest"}))
       this.setState(prevState => ({count: restTime}))
     } else {
-      this.setState(prevState => ({mode: "work"}))
+      this.setState(prevState => ({mode: "Work"}))
       this.setState(prevState => ({count: workTime}))
     }
   }
 
   resetCount = () => {
-    if (this.state.mode === "work"){
+    if (this.state.mode === "Work"){
        this.setState(prevState => ({count: workTime}))
     } else {
        this.setState(prevState => ({count: restTime}))
@@ -92,11 +94,11 @@ togglePause = () => {
     return (
       <View style={styles.appContainer}>
         <Text style={styles.titleText}>Pomodoro Timer</Text>
-        <Text> Current mode : {this.state.mode}</Text>
+        <Text style={styles.modeText}> Current mode : {this.state.mode}</Text>
         <Count count={this.state.count} isPaused={this.state.isPaused} />
         <View style={styles.buttons}> 
-         <PauseButton togglePause={this.togglePause}/> 
-          <Button title="reset" onPress={() => this.resetCount()}/>
+          <PauseButton togglePause={this.togglePause}/> 
+          <Button title="reset" color="#00096b" onPress={() => this.resetCount()}/>
         </View>
       </View>
     );
@@ -104,17 +106,24 @@ togglePause = () => {
 }
 
 const styles = StyleSheet.create({
-  titleText:{
-      fontSize: 24,
-  },
+  
   appContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#222222',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  titleText:{
+      fontSize: 24,
+       color: 'white',
+  },
+  modeText:{
+    fontSize: 16,
+    color: 'white',
+  },
   count: {
     fontSize: 48,
+    color: 'white',
   },
   buttons: {
     flexDirection: "row",
