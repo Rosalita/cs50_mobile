@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import {vibrate} from './utils'
 
 const workTime = 1500
 const restTime = 300
@@ -82,6 +83,10 @@ export default class App extends React.Component {
     }
   }
 
+  startVibrate = () => {
+      vibrate()
+  }
+
   resetCount = () => {
     if (this.state.mode === "Work"){
        this.setState(prevState => ({count: workTime}))
@@ -114,6 +119,7 @@ secondsToTimeString = (seconds) => {
         <Text style={styles.modeText}> Current mode : {this.state.mode}</Text>
         <Count count={this.secondsToTimeString(this.state.count)} isPaused={this.state.isPaused} />
         <View style={styles.buttons}> 
+          <Button title="vibrate" onPress={this.startVibrate} />
           <PauseButton togglePause={this.togglePause}/> 
           <Button title="reset" color="#00096b" onPress={() => this.resetCount()}/>
         </View>
