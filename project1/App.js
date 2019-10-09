@@ -74,6 +74,7 @@ export default class App extends React.Component {
   }
 
   toggleMode = () => {
+    vibrate()
     if (this.state.mode === "Work"){
       this.setState(prevState => ({mode: "Rest"}))
       this.setState(prevState => ({count: restTime}))
@@ -81,10 +82,6 @@ export default class App extends React.Component {
       this.setState(prevState => ({mode: "Work"}))
       this.setState(prevState => ({count: workTime}))
     }
-  }
-
-  startVibrate = () => {
-      vibrate()
   }
 
   resetCount = () => {
@@ -119,7 +116,6 @@ secondsToTimeString = (seconds) => {
         <Text style={styles.modeText}> Current mode : {this.state.mode}</Text>
         <Count count={this.secondsToTimeString(this.state.count)} isPaused={this.state.isPaused} />
         <View style={styles.buttons}> 
-          <Button title="vibrate" onPress={this.startVibrate} />
           <PauseButton togglePause={this.togglePause}/> 
           <Button title="reset" color="#00096b" onPress={() => this.resetCount()}/>
         </View>
@@ -152,4 +148,3 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 });
-

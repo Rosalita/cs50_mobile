@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "project1",
-    "slug": "project1",
+    "name": "Pomodoro Timer",
+    "slug": "pomodoro-timer",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": [
@@ -27,8 +27,9 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.yourcompany.yourappname"
+      "package": "dev.rosie.pomodoro"
     },
-    "description": ""
+    "description": "CS50 Mobile Project 1 - Pomodoro Timer",
+    "githubUrl": "https://github.com/Rosalita/cs50_mobile/tree/master/project1"
   }
 }
