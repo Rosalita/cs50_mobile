@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import { vibrate } from './utils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-const workTime = 1500
-const restTime = 300
+
 
 class ScreenPomodoro extends React.Component {
 
@@ -16,16 +15,14 @@ class ScreenPomodoro extends React.Component {
     this.state = {
       mode: "Work",
       isPaused: false,
-      count: workTime,
+      count: 1500,
+      workSeconds: 1500,
+      restSeconds: 300,
     }
   }
 
   togglePause = () => {
-    if (this.state.isPaused === false) {
-      this.setState(prevState => ({ isPaused: true }))
-    } else {
-      this.setState(prevState => ({ isPaused: false }))
-    }
+    this.setState(prevState => ({ isPaused: !prevState.isPaused }))
   }
 
   componentDidMount() {
@@ -44,19 +41,19 @@ class ScreenPomodoro extends React.Component {
   toggleMode = () => {
     vibrate()
     if (this.state.mode === "Work") {
-      this.setState(prevState => ({ mode: "Rest" }))
-      this.setState(prevState => ({ count: restTime }))
+      this.setState(() => ({ mode: "Rest" }))
+      this.setState(() => ({ count: this.state.restSeconds }))
     } else {
-      this.setState(prevState => ({ mode: "Work" }))
-      this.setState(prevState => ({ count: workTime }))
+      this.setState(() => ({ mode: "Work" }))
+      this.setState(() => ({ count: this.state.workSeconds }))
     }
   }
 
   resetCount = () => {
     if (this.state.mode === "Work") {
-      this.setState(prevState => ({ count: workTime }))
+      this.setState(() => ({ count: this.state.workSeconds }))
     } else {
-      this.setState(prevState => ({ count: restTime }))
+      this.setState(() => ({ count: this.state.restSeconds }))
     }
   }
 
@@ -83,7 +80,7 @@ class ScreenPomodoro extends React.Component {
         <Text style={styles.titleText}>Pomodoro Timer</Text>
         <Text style={styles.modeText}> Current mode : {this.state.mode}</Text>
         <Count count={this.secondsToTimeString(this.state.count)} isPaused={this.state.isPaused} />
-        <View style={styles.buttons}>
+        <View style={styles.row}>
           <PauseButton togglePause={this.togglePause} />
           <Button title="reset" color="#00096b" onPress={() => this.resetCount()} />
         </View>
@@ -103,10 +100,111 @@ ScreenPomodoro.navigationOptions = {
 }
 
 class ScreenSettings extends React.Component {
+  state = {
+    workMins: '25',
+    workSecs: '0',
+    restMins: '300',
+    restSecs: '0',
+    isValid: false,
+  }
+  // settings needs to take a function that knows how to update state on pomodoro
+
+  handleWorkMinsChange = mins => {
+    this.setState({ workMins: mins })
+  }
+
+  handleWorkSecsChange = secs => {
+    this.setState({ workSecs: secs })
+  }
+
+  handleRestMinsChange = mins => {
+    this.setState({ restMins: mins })
+  }
+
+  handleRestSecsChange = secs => {
+    this.setState({ restSecs: secs })
+  }
+
+  validate = () => {
+    if (
+      +this.state.workMins >= 0 &&
+      this.state.workMins.length > 0 &&
+      +this.state.workSecs >= 0 &&
+      this.state.workSecs.length > 0 &&
+      +this.state.restMins >= 0 &&
+      this.state.restMins.length > 0 &&
+      +this.state.restSecs >= 0 &&
+      this.state.restSecs.length > 0
+    ) {
+      this.setState({ isValid: true })
+    } else {
+      this.setState({ isValid: false })
+    }
+  }
+
+  handleSave = () => {
+    this.props.onSubmit(this.state)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.workMins !== prevState.workMins ||
+      this.state.workSecs !== prevState.workSecs ||
+      this.state.restMins !== prevState.restMins ||
+      this.state.restSecs !== prevState.restSecs
+    ) {
+      this.validate()
+    }
+  }
+
   render() {
     return (
       <View style={styles.appContainer}>
         <Text style={styles.titleText}>Settings</Text>
+        <View style={styles.row}>
+          <Text style={styles.titleText}>Work Minutes</Text>
+          <TextInput
+            style={styles.input}
+            value={this.state.workMins}
+            onChangeText={this.handleWorkMinsChange}
+            placeholder="Minutes"
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.titleText}>Work Seconds</Text>
+          <TextInput
+            style={styles.input}
+            value={this.state.workSecs}
+            onChangeText={this.handleWorkSecsChange}
+            placeholder="Seconds"
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.titleText}>Rest Minutes</Text>
+          <TextInput
+            style={styles.input}
+            value={this.state.restMins}
+            onChangeText={this.handleRestMinsChange}
+            placeholder="Minutes"
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.titleText}>Rest Seconds</Text>
+          <TextInput
+            style={styles.input}
+            value={this.state.restSecs}
+            onChangeText={this.handleRestSecsChange}
+            placeholder="Seconds"
+            keyboardType="numeric"
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Button title="Save" onPress={this.handleSave} disabled={!this.state.isValid} />
+        </View>
       </View>
     )
   }
@@ -115,7 +213,7 @@ class ScreenSettings extends React.Component {
 ScreenSettings.navigationOptions = {
   tabBarIcon: ({ tintColour }) => (
     <Ionicons
-      name={'md-hourglass'}
+      name={'md-settings'}
       size={25}
       color={tintColour}
     />
@@ -170,11 +268,11 @@ class PauseButton extends React.Component {
 
   onPress = () => {
     if (this.state.text === "start") {
-      this.setState(prevState => ({ text: "stop" }))
-      this.setState(prevState => ({ color: "#9c0000" }))
+      this.setState(() => ({ text: "stop" }))
+      this.setState(() => ({ color: "#9c0000" }))
     } else {
-      this.setState(prevState => ({ text: "start" }))
-      this.setState(prevState => ({ color: "#004a00" }))
+      this.setState(() => ({ text: "start" }))
+      this.setState(() => ({ color: "#004a00" }))
     }
     this.props.togglePause()
   }
@@ -200,7 +298,16 @@ const styles = StyleSheet.create({
     fontSize: 48,
     color: 'white',
   },
-  buttons: {
+  row: {
     flexDirection: "row",
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  input: {
+    backgroundColor: 'white',
+    minWidth: 100,
+    marginHorizontal: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
 });
