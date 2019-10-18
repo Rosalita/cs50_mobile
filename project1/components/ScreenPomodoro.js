@@ -1,46 +1,11 @@
 import React from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
-import { vibrate } from "../utils";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-class Count extends React.Component {
-  render() {
-    return <Text style={styles.count}>{this.props.count}</Text>;
-  }
-}
-
-class PauseButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "stop",
-      color: "#9c0000",
-    };
-  }
-
-  render() {
-    return (
-      <Button
-        title={this.state.text}
-        color={this.state.color}
-        onPress={() => this.onPress()}
-      />
-    );
-  }
-
-  onPress = () => {
-    if (this.state.text === "start") {
-      this.setState(() => ({ text: "stop" }));
-      this.setState(() => ({ color: "#9c0000" }));
-    } else {
-      this.setState(() => ({ text: "start" }));
-      this.setState(() => ({ color: "#004a00" }));
-    }
-    this.props.togglePause();
-  };
-}
+import { AppContext } from "../AppContext";
+import { PauseButton, Count } from "./Controls";
 
 export default class ScreenPomodoro extends React.Component {
+  static contextType = AppContext;
   static navigationOptions = {
     tabBarIcon: ({ tintColour }) => (
       <Ionicons name={"md-hourglass"} size={25} color={tintColour} />
@@ -51,11 +16,8 @@ export default class ScreenPomodoro extends React.Component {
     super(props);
 
     this.state = {
-      mode: "Work",
-      isPaused: false,
       count: 1500,
-      workSeconds: 1500,
-      restSeconds: 300,
+      isPaused: false,
     };
   }
 
@@ -63,35 +25,25 @@ export default class ScreenPomodoro extends React.Component {
     this.setState((prevState) => ({ isPaused: !prevState.isPaused }));
   };
 
-  componentDidMount() {
-    setInterval(this.decrementCount, 1000);
-  }
-
   decrementCount = () => {
     if (this.state.isPaused === false) {
       this.setState((prevState) => ({ count: prevState.count - 1 }));
     }
     if (this.state.count === 0) {
-      this.toggleMode();
-    }
-  };
-
-  toggleMode = () => {
-    vibrate();
-    if (this.state.mode === "Work") {
-      this.setState(() => ({ mode: "Rest" }));
-      this.setState(() => ({ count: this.state.restSeconds }));
-    } else {
-      this.setState(() => ({ mode: "Work" }));
-      this.setState(() => ({ count: this.state.workSeconds }));
+      this.context.toggleMode();
+      if (this.context.mode === "Work") {
+        this.setState({ count: this.context.workSecs });
+      } else {
+        this.setState({ count: this.context.restSecs });
+      }
     }
   };
 
   resetCount = () => {
-    if (this.state.mode === "Work") {
-      this.setState(() => ({ count: this.state.workSeconds }));
+    if (this.context.mode === "Work") {
+      this.setState(() => ({ count: this.context.workSecs }));
     } else {
-      this.setState(() => ({ count: this.state.restSeconds }));
+      this.setState(() => ({ count: this.context.restSecs }));
     }
   };
 
@@ -112,11 +64,15 @@ export default class ScreenPomodoro extends React.Component {
     return strMins + ":" + strSecs;
   };
 
+  componentDidMount() {
+    setInterval(this.decrementCount, 1000);
+  }
+
   render() {
     return (
       <View style={styles.appContainer}>
         <Text style={styles.titleText}>Pomodoro Timer</Text>
-        <Text style={styles.modeText}> Current mode : {this.state.mode}</Text>
+        <Text style={styles.modeText}> Current mode : {this.context.mode}</Text>
         <Count
           count={this.secondsToTimeString(this.state.count)}
           isPaused={this.state.isPaused}
