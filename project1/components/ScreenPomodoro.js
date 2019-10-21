@@ -68,6 +68,12 @@ export default class ScreenPomodoro extends React.Component {
     setInterval(this.decrementCount, 1000);
   }
 
+  componentDidUpdate(){
+    if (this.context.isResetNeeded === true){
+      this.resetCount()
+      this.context.toggleResetNeeded()
+    }
+  }
   render() {
     return (
       <View style={styles.appContainer}>

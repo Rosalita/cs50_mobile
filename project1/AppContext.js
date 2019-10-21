@@ -8,6 +8,7 @@ export default class AppProvider extends React.Component {
     mode: "Work",
     workSecs: 1500,
     restSecs: 300,
+    isResetNeeded: false,
   };
 
   toggleMode = () => {
@@ -20,13 +21,15 @@ export default class AppProvider extends React.Component {
   };
 
   updateWorkSecs = (secs) => {
-    console.log(secs);
     this.setState({ workSecs: secs });
   };
 
   updateRestSecs = (secs) => {
-    console.log(secs);
     this.setState({ restSecs: secs });
+  };
+
+  toggleResetNeeded = () => {
+    this.setState((prevState) => ({ isResetNeeded: !prevState.isResetNeeded }));
   };
 
   render() {
@@ -37,6 +40,7 @@ export default class AppProvider extends React.Component {
           toggleMode: this.toggleMode,
           updateWorkSecs: this.updateWorkSecs,
           updateRestSecs: this.updateRestSecs,
+          toggleResetNeeded: this.toggleResetNeeded,
         }}
       >
         {this.props.children}

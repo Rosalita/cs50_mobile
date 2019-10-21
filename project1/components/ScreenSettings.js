@@ -12,8 +12,42 @@ export default class ScreenSettings extends React.Component {
   };
 
   state = {
+    textInputWorkSecs : this.context.workSecs,
+    textInputRestSecs : this.context.restSecs,
     isValid: false,
   };
+
+  validate = () => {
+    if (
+      +this.state.textInputWorkSecs >= 0 &&
+      +this.state.textInputRestSecs >= 0 
+    ) {
+      this.setState({ isValid: true })
+    } else {
+      this.setState({ isValid: false })
+    }
+  }
+
+  updateTextInputWorkSecs = (secs) => {
+    this.setState({textInputWorkSecs: secs});
+  }
+
+  updateTextInputRestSecs = (secs) => {
+    this.setState({textInputRestSecs: secs});
+  }
+
+
+  componentDidMount() {
+    this.setState({textInputWorkSecs: this.context.workSecs})
+    this.setState({textInputRestSecs: this.context.restSecs})
+    this.validate()
+  }
+
+  save = () => {
+    this.context.updateWorkSecs(Number(this.state.textInputWorkSecs))
+    this.context.updateRestSecs(Number(this.state.textInputRestSecs))
+    this.context.toggleResetNeeded()
+  }
 
   render() {
     return (
@@ -23,8 +57,8 @@ export default class ScreenSettings extends React.Component {
           <Text style={styles.titleText}>Work Seconds</Text>
           <TextInput
             style={styles.input}
-            value={`${this.context.workSecs}`}
-            onChangeText={(secs) => this.context.updateWorkSecs(Number(secs))}
+            value={`${this.state.textInputWorkSecs}`}
+            onChangeText={(secs) => this.updateTextInputWorkSecs(Number(secs))}
             placeholder="Seconds"
             keyboardType="numeric"
           />
@@ -33,8 +67,8 @@ export default class ScreenSettings extends React.Component {
           <Text style={styles.titleText}>Rest Seconds</Text>
           <TextInput
             style={styles.input}
-            value={`${this.context.restSecs}`}
-            onChangeText={(secs) => this.context.updateRestSecs(Number(secs))}
+            value={`${this.state.textInputRestSecs}`}
+            onChangeText={(secs) => this.updateTextInputRestSecs(Number(secs))}
             placeholder="Seconds"
             keyboardType="numeric"
           />
@@ -43,7 +77,7 @@ export default class ScreenSettings extends React.Component {
         <View style={styles.row}>
           <Button
             title="Save"
-            onPress={() => void 0}
+            onPress={this.save}
             disabled={!this.state.isValid}
           />
         </View>
