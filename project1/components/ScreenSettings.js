@@ -17,10 +17,14 @@ export default class ScreenSettings extends React.Component {
     isValid: false,
   };
 
+  isNumber = (value) => {
+    return + value >= 0
+  }
+
   validate = () => {
     if (
-      +this.state.textInputWorkSecs >= 0 &&
-      +this.state.textInputRestSecs >= 0 
+      this.isNumber(this.state.textInputWorkSecs) &&
+      this.isNumber(this.state.textInputRestSecs) 
     ) {
       this.setState({ isValid: true })
     } else {
@@ -29,11 +33,15 @@ export default class ScreenSettings extends React.Component {
   }
 
   updateTextInputWorkSecs = (secs) => {
-    this.setState({textInputWorkSecs: secs});
+    if (secs > 0){
+      this.setState({textInputWorkSecs: secs});
+    }
   }
 
   updateTextInputRestSecs = (secs) => {
-    this.setState({textInputRestSecs: secs});
+    if (secs > 0){
+      this.setState({textInputRestSecs: secs});
+    }
   }
 
 
