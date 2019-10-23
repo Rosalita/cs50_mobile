@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import Constants from 'expo-constants'
 import searchMovies from "../API";
 
@@ -10,32 +10,47 @@ export default class search extends React.Component {
     };
 
     state = {
+        searchString: "",
         movies: "",
     };
 
-    // TODO Add text input box to get the search string into the API query
-    // Write a function that takes a search object and returns the name and imdb numbers of the movies
+    // TODO
     // display a list of all movie names
     // when clicked navigate to movie screen and pass it the imdb number
     // movie screen to make another api call to omdbAPI to get the movie details
 
 
-    getMovies = async () => {
-        const results = await searchMovies("starwars")
-        console.log("@@@")
-        console.log(results["Search"][0].Title)
-        this.setState({movies: results})
+    getMovies = async (searchString) => {
+        const results = await searchMovies(`${searchString}`)
+        console.log(results)
+
+        if (results !== undefined) {
+            this.setState({ movies: results })
+        }
 
     }
 
-    componentDidMount(){
-        this.getMovies()
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.searchString !== prevState.searchString) {
+            this.getMovies(this.state.searchString)
+        }
     }
 
-    
+    updateSearch = searchString => {
+        this.setState({ searchString })
+        console.log(this.state.searchString)
+    }
+
+
     render() {
         return (
             <View style={styles.appContainer}>
+                <Text>Find a movie</Text>
+                <TextInput
+                    style={styles.searchInput}
+                    value={this.state.searchString}
+                    onChangeText={this.updateSearch}
+                />
                 <Button
                     title="Movie"
                     onPress={() => this.props.navigation.navigate("Movie")}
@@ -50,5 +65,17 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#AAAAAF",
         paddingTop: Constants.statusBarHeight,
+        alignItems: "center"
     },
+    searchInput: {
+        backgroundColor: "#FFFFFF",
+        borderWidth: 1,
+        borderColor: 'black',
+        minWidth: 200,
+        marginTop: 20,
+        marginHorizontal: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 3,
+    }
 });
