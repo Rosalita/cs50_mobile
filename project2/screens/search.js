@@ -24,6 +24,7 @@ export default class search extends React.Component {
     };
 
     // TODO
+    // Display more than 10 results for each search
     // when clicked navigate to movie screen and pass it the imdb number
     // movie screen to make another api call to omdbAPI to get the movie details
 
@@ -47,6 +48,10 @@ export default class search extends React.Component {
         this.setState({ searchString })
     }
 
+    displayMore = () => {
+
+    }
+
     render() {
         return (
             <View style={styles.appContainer}>
@@ -61,13 +66,14 @@ export default class search extends React.Component {
                     data={this.state.movies}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}
+                    onEndReached={this.displayMore}
                 />
 
                 {/* <Button
                     title="Movie"
                     onPress={() => this.props.navigation.navigate("Movie")}
                 /> */}
-                
+
             </View>
         )
     }
