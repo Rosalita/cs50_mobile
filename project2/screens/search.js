@@ -1,7 +1,16 @@
 import React from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 import Constants from 'expo-constants'
 import searchMovies from "../API";
+
+
+const Row = props => (
+    <View style={styles.row}>
+        <Text>{props.title}</Text>
+    </View>
+)
+const renderItem = obj => <Row {...obj.item}/>
+
 
 export default class search extends React.Component {
     static navigationOptions = {
@@ -15,7 +24,6 @@ export default class search extends React.Component {
     };
 
     // TODO
-    // display a list of all movie names
     // when clicked navigate to movie screen and pass it the imdb number
     // movie screen to make another api call to omdbAPI to get the movie details
 
@@ -27,7 +35,6 @@ export default class search extends React.Component {
         if (results !== undefined) {
             this.setState({ movies: results })
         }
-
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -38,9 +45,7 @@ export default class search extends React.Component {
 
     updateSearch = searchString => {
         this.setState({ searchString })
-        console.log(this.state.searchString)
     }
-
 
     render() {
         return (
@@ -51,10 +56,18 @@ export default class search extends React.Component {
                     value={this.state.searchString}
                     onChangeText={this.updateSearch}
                 />
-                <Button
+
+                <FlatList
+                    data={this.state.movies}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id}
+                />
+
+                {/* <Button
                     title="Movie"
                     onPress={() => this.props.navigation.navigate("Movie")}
-                />
+                /> */}
+                
             </View>
         )
     }
@@ -77,5 +90,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 3,
-    }
+    },
+    row: { padding: 20 },
 });
