@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 import Constants from 'expo-constants'
-import searchMovies from "../API";
+import { searchMovies, getMoviePage } from "../API";
 
 
 const Row = props => (
@@ -9,8 +9,7 @@ const Row = props => (
         <Text>{props.title}</Text>
     </View>
 )
-const renderItem = obj => <Row {...obj.item}/>
-
+const renderItem = obj => <Row {...obj.item} />
 
 export default class search extends React.Component {
     static navigationOptions = {
@@ -21,20 +20,28 @@ export default class search extends React.Component {
     state = {
         searchString: "",
         movies: "",
+        totalResults: 0,
+        totalPages: 0,
+        nextPage: 0,
     };
 
     // TODO
-    // Display more than 10 results for each search
     // when clicked navigate to movie screen and pass it the imdb number
     // movie screen to make another api call to omdbAPI to get the movie details
-
 
     getMovies = async (searchString) => {
         const results = await searchMovies(`${searchString}`)
         console.log(results)
 
         if (results !== undefined) {
-            this.setState({ movies: results })
+            this.setState({ movies: results["result"] })
+            this.setState({ totalResults: results["totalResults"] })
+            this.setState({ totalPages: results["totalPages"] })
+
+            if (results["totalPages"] > 1) {
+                this.setState({ nextPage: 2 })
+            }
+
         }
     }
 
@@ -45,10 +52,32 @@ export default class search extends React.Component {
     }
 
     updateSearch = searchString => {
-        this.setState({ searchString })
+        this.setState({
+            searchString: searchString,
+            movies: "",
+            totalResults: 0,
+            totalPages: 0,
+            nextPage: 0
+        })
     }
 
-    displayMore = () => {
+    displayMore = async () => {
+        if (this.state.totalPages === 1) {
+            return
+        }
+
+        if (this.state.nextPage === this.state.totalPages) {
+            return
+        }
+        const results = await getMoviePage(this.state.searchString, this.state.nextPage)
+
+        if (results !== undefined) {
+            this.setState(prevState => ({ movies: [...prevState.movies, ...results] }));
+
+            if (this.state.nextPage < this.state.totalPages) {
+                this.setState({ nextPage: this.state.nextPage++ })
+            }
+        }
 
     }
 
@@ -62,6 +91,7 @@ export default class search extends React.Component {
                     onChangeText={this.updateSearch}
                 />
 
+                <Text>Results found: {this.state.totalResults}</Text>
                 <FlatList
                     data={this.state.movies}
                     renderItem={renderItem}

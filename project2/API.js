@@ -2,25 +2,29 @@ const URL = "http://www.omdbapi.com/?i=tt3896198&apikey=29be7072"
 const URLPrefix = "http://www.omdbapi.com/?s="
 const URLSuffix = "&apikey=29be7072"
 
-export default searchMovies = async (searchString) => {
+export const searchMovies = async (searchString) => {
 
-    const response = await fetch(`${URLPrefix}${searchString}${URLSuffix}`)
-    const results = await response.json() 
+    const URL = `${URLPrefix}${searchString}${URLSuffix}`
+    const response = await fetch(URL)
+    const results = await response.json()
 
     console.log(results["totalResults"])
 
-    // ToDo
-    // calculate the total pages from the total number of results
-    // there are 10 results shown per page
-    // if there's more than one page of results,
-    // query for each page adding the results to an array
-    // use &page=n in request to do this
-    // clean up that array and return it
-
-    if (results["Response"] !== "False"){
+    if (results["Response"] !== "False") {
+        const totalResults = results["totalResults"]
+        const totalPages = Math.ceil(totalResults / 10)
         const search = results["Search"]
-        return search.map(processMovie)
+        const processedResults = search.map(processMovie)
+        return {totalResults: totalResults, totalPages: totalPages, result: processedResults}
     }
+}
+
+export const getMoviePage = async (searchString, pageNum) => {
+    const URL = `${URLPrefix}${searchString}${URLSuffix}&page=${pageNum}`
+    const response = await fetch(URL)
+    const results = await response.json()
+    const search = results["Search"]
+    return search.map(processMovie)
 }
 
 processMovie = (raw) => ({
