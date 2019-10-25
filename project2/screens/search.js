@@ -109,7 +109,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#AAAAAF",
         paddingTop: Constants.statusBarHeight,
-        alignItems: "center"
+        width: "100%",
+      
     },
     searchInput: {
         backgroundColor: "#FFFFFF",
