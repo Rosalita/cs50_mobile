@@ -62,13 +62,9 @@ export default class search extends React.Component {
     }
 
     displayMore = async () => {
-        if (this.state.totalPages === 1) {
-            return
-        }
+        if (this.state.totalPages === 1) return
+        if (this.state.nextPage === this.state.totalPages) return
 
-        if (this.state.nextPage === this.state.totalPages) {
-            return
-        }
         const results = await getMoviePage(this.state.searchString, this.state.nextPage)
 
         if (results !== undefined) {
@@ -78,7 +74,6 @@ export default class search extends React.Component {
                 this.setState({ nextPage: this.state.nextPage++ })
             }
         }
-
     }
 
     render() {

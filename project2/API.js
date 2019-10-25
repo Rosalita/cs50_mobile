@@ -1,4 +1,3 @@
-const URL = "http://www.omdbapi.com/?i=tt3896198&apikey=29be7072"
 const URLPrefix = "http://www.omdbapi.com/?s="
 const URLSuffix = "&apikey=29be7072"
 
@@ -15,7 +14,7 @@ export const searchMovies = async (searchString) => {
         const totalPages = Math.ceil(totalResults / 10)
         const search = results["Search"]
         const processedResults = search.map(processMovie)
-        return {totalResults: totalResults, totalPages: totalPages, result: processedResults}
+        return { totalResults: totalResults, totalPages: totalPages, result: processedResults }
     }
 }
 

@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import Constants from 'expo-constants'
 
 export default class movie extends React.Component {
     static navigationOptions = {
         title: "Movie",
         headerTitleStyle: { color: "#AAAAAF", }
-      };
+    };
 
     render() {
         return (
