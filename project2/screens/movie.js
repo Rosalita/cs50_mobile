@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, StyleSheet, View } from "react-native";
+import { Button, Text, StyleSheet, View } from "react-native";
 import Constants from 'expo-constants'
 
 export default class movie extends React.Component {
@@ -8,14 +8,21 @@ export default class movie extends React.Component {
         headerTitleStyle: { color: "#AAAAAF", }
     };
 
+    state = {
+        movieID: "",
+    };
+
+    componentDidMount() {
+        this.setState({movieID: this.props.navigation.getParam('MovieID', null)})
+    }
+
+
     render() {
         return (
             <View style={styles.appContainer}>
-                <Button
-                    title="Search"
-                    onPress={() => this.props.navigation.navigate("Search")}
-                />
+                <Text>Movie selected was {this.state.movieID}</Text>
             </View>
+
         )
     }
 }

@@ -64,7 +64,7 @@ export default class search extends React.Component {
     }
 
     movieSelected = (id) => {
-        console.log(`selected movie ID ${id}`)
+        this.props.navigation.navigate("Movie", {"MovieID":id})
     }
 
     displayMore = async () => {
