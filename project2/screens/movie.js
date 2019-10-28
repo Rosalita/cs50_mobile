@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Image, Text, StyleSheet, View } from "react-native";
 import Constants from 'expo-constants'
 import { getMovieDetails } from "../API";
 
@@ -126,7 +126,7 @@ export default class movie extends React.Component {
     render() {
         return (
             <View style={styles.appContainer}>
-                <Text>Poster: {this.state.poster}</Text>
+                <Image style={{width: 200, height: 300}} source={{uri: this.state.poster}} />
                 <Text>Title: {this.state.title} </Text>
                 <Text>Year: {this.state.year}</Text>
                 <Text>Genre: {this.state.genre}</Text>
