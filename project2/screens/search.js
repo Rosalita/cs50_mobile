@@ -89,10 +89,11 @@ export default class search extends React.Component {
 
                 <Text>Results found: {this.state.totalResults}</Text>
                 <FlatList
+                     onEndReached={this.displayMore}
                     data={this.state.movies}
                     renderItem={renderItem(this.movieSelected)}
                     keyExtractor={(item) => item.id}
-                    onEndReached={this.displayMore}
+               
                 />
 
             </View>

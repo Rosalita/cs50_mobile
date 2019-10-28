@@ -10,6 +10,7 @@ export const getMovieDetails = async (movieID) => {
     const details = await response.json()
     return details
 }
+
 export const searchMovies = async (searchString) => {
 
     const URL = `${URLPrefix}?s=${searchString}${URLSuffix}`
@@ -28,7 +29,7 @@ export const searchMovies = async (searchString) => {
 }
 
 export const getMoviePage = async (searchString, pageNum) => {
-    const URL = `${URLPrefix}${searchString}${URLSuffix}&page=${pageNum}`
+    const URL = `${URLPrefix}?s=${searchString}${URLSuffix}&page=${pageNum}`
     const response = await fetch(URL)
     const results = await response.json()
     const search = results["Search"]
