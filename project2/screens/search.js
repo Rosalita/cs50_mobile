@@ -6,9 +6,9 @@ import { searchMovies, getMoviePage } from "../API";
 
 const Row = props => (
     <TouchableOpacity onPress={() => props.selected(props.id)}>
-    <View style={styles.row}>
-        <Text>{props.title}</Text>
-    </View>
+        <View style={styles.row}>
+            <Text style={styles.listText}>{props.title}</Text>
+        </View>
     </TouchableOpacity>
 )
 const renderItem = selected => obj => <Row selected={selected}{...obj.item} />
@@ -64,7 +64,7 @@ export default class search extends React.Component {
     }
 
     movieSelected = (id) => {
-        this.props.navigation.navigate("Movie", {"MovieID":id})
+        this.props.navigation.navigate("Movie", { "MovieID": id })
     }
 
     displayMore = async () => {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#AAAAAF",
         paddingTop: Constants.statusBarHeight,
         width: "100%",
-      
+
     },
     searchInput: {
         backgroundColor: "#FFFFFF",
@@ -124,10 +124,17 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         minWidth: 200,
         marginTop: 20,
+        marginBottom: 20,
         marginHorizontal: 20,
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 3,
     },
-    row: { padding: 20 },
+    row: {
+        padding: 20,
+    },
+    listText: {
+        color: "blue",
+    }
+
 });

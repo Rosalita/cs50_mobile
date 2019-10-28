@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, StyleSheet, View } from "react-native";
+import { Image, Text, StyleSheet, ScrollView, View } from "react-native";
 import Constants from 'expo-constants'
 import { getMovieDetails } from "../API";
 
@@ -126,29 +126,33 @@ export default class movie extends React.Component {
     render() {
         return (
             <View style={styles.appContainer}>
-                <Image style={{width: 200, height: 300}} source={{uri: this.state.poster}} />
-                <Text>Title: {this.state.title} </Text>
-                <Text>Year: {this.state.year}</Text>
-                <Text>Genre: {this.state.genre}</Text>
-                <Text>Rated:{this.state.rated}</Text>
-                <Text>Type: {this.state.type}</Text>
-                <Text>Runtime: {this.state.runtime}</Text>
-                <Text>Country: {this.state.country}</Text>
-                <Text>Language: {this.state.language}</Text>
-                <Text>Released: {this.state.released}</Text>
-                <Text>DVD: {this.state.dvd}</Text>
-                <Text>BoxOffice: {this.state.boxOffice}</Text>
-                <Text>Awards: {this.state.awards}</Text>
-                <Text>Metascore: {this.state.metascore}</Text>
-                <Text>IMDB ID:{this.state.imdbID} </Text>
-                <Text>IMDB Rating: {this.state.imdbRating}</Text>
-                <Text>IMDB Votes: {this.state.imdbVotes}</Text>
-                <Text>Writer: {this.state.writer}</Text>
-                <Text>Director {this.state.director}</Text>
-                <Text>Actors: {this.state.actors}</Text>
-                <Text>Plot: {this.state.plot}</Text>
-                <Text>Production: {this.state.production}</Text>
-                <Text>Website: {this.state.website}</Text>
+                <View style={styles.image}>
+                <Image style={{ width: 200, height: 300 }} source={{ uri: this.state.poster }} />
+                </View>
+                <ScrollView style={styles.scroll}>
+                    <Text>Title: {this.state.title} </Text>
+                    <Text>Year: {this.state.year}</Text>
+                    <Text>Genre: {this.state.genre}</Text>
+                    <Text>Rated:{this.state.rated}</Text>
+                    <Text>Type: {this.state.type}</Text>
+                    <Text>Runtime: {this.state.runtime}</Text>
+                    <Text>Country: {this.state.country}</Text>
+                    <Text>Language: {this.state.language}</Text>
+                    <Text>Released: {this.state.released}</Text>
+                    <Text>DVD: {this.state.dvd}</Text>
+                    <Text>BoxOffice: {this.state.boxOffice}</Text>
+                    <Text>Awards: {this.state.awards}</Text>
+                    <Text>Metascore: {this.state.metascore}</Text>
+                    <Text>IMDB ID:{this.state.imdbID} </Text>
+                    <Text>IMDB Rating: {this.state.imdbRating}</Text>
+                    <Text>IMDB Votes: {this.state.imdbVotes}</Text>
+                    <Text>Writer: {this.state.writer}</Text>
+                    <Text>Director {this.state.director}</Text>
+                    <Text>Actors: {this.state.actors}</Text>
+                    <Text>Plot: {this.state.plot}</Text>
+                    <Text>Production: {this.state.production}</Text>
+                    <Text>Website: {this.state.website}</Text>
+                </ScrollView>
             </View>
 
         )
@@ -161,4 +165,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#AAAAAF",
         paddingTop: Constants.statusBarHeight,
     },
+    image :{
+        alignItems: "center",
+    },
+    scroll:{
+        marginTop: 10,
+        marginBottom: 10,
+    }
 });
