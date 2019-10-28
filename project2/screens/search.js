@@ -27,10 +27,6 @@ export default class search extends React.Component {
         nextPage: 0,
     };
 
-    // TODO
-    // when clicked navigate to movie screen and pass it the imdb number
-    // movie screen to make another api call to omdbAPI to get the movie details
-
     getMovies = async (searchString) => {
         const results = await searchMovies(`${searchString}`)
         console.log(results)
@@ -43,7 +39,6 @@ export default class search extends React.Component {
             if (results["totalPages"] > 1) {
                 this.setState({ nextPage: 2 })
             }
-
         }
     }
 
@@ -99,11 +94,6 @@ export default class search extends React.Component {
                     keyExtractor={(item) => item.id}
                     onEndReached={this.displayMore}
                 />
-
-                {/* <Button
-                    title="Movie"
-                    onPress={() => this.props.navigation.navigate("Movie")}
-                /> */}
 
             </View>
         )

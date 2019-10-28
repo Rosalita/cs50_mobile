@@ -127,7 +127,7 @@ export default class movie extends React.Component {
         return (
             <View style={styles.appContainer}>
                 <View style={styles.image}>
-                <Image style={{ width: 200, height: 300 }} source={{ uri: this.state.poster }} />
+                    <Image style={{ width: 200, height: 300 }} source={{ uri: this.state.poster }} />
                 </View>
                 <ScrollView style={styles.scroll}>
                     <Text>Title: {this.state.title} </Text>
@@ -154,7 +154,6 @@ export default class movie extends React.Component {
                     <Text>Website: {this.state.website}</Text>
                 </ScrollView>
             </View>
-
         )
     }
 }
@@ -165,10 +164,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#AAAAAF",
         paddingTop: Constants.statusBarHeight,
     },
-    image :{
+    image: {
         alignItems: "center",
     },
-    scroll:{
+    scroll: {
         marginTop: 10,
         marginBottom: 10,
     }
