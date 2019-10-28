@@ -1,9 +1,18 @@
-const URLPrefix = "http://www.omdbapi.com/?s="
+const URLPrefix = "http://www.omdbapi.com/"
 const URLSuffix = "&apikey=29be7072"
 
+// get movie details
+// http://www.omdbapi.com/?i=tt1058014&apikey=29be7072
+
+export const getMovieDetails = async (movieID) => {
+    const URL = `${URLPrefix}?i=${movieID}${URLSuffix}`
+    const response = await fetch(URL)
+    const details = await response.json()
+    return details
+}
 export const searchMovies = async (searchString) => {
 
-    const URL = `${URLPrefix}${searchString}${URLSuffix}`
+    const URL = `${URLPrefix}?s=${searchString}${URLSuffix}`
     const response = await fetch(URL)
     const results = await response.json()
 
