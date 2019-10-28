@@ -1,15 +1,17 @@
 import React from "react";
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, TouchableOpacity, TextInput, View } from "react-native";
 import Constants from 'expo-constants'
 import { searchMovies, getMoviePage } from "../API";
 
 
 const Row = props => (
+    <TouchableOpacity onPress={() => props.selected(props.id)}>
     <View style={styles.row}>
         <Text>{props.title}</Text>
     </View>
+    </TouchableOpacity>
 )
-const renderItem = obj => <Row {...obj.item} />
+const renderItem = selected => obj => <Row selected={selected}{...obj.item} />
 
 export default class search extends React.Component {
     static navigationOptions = {
@@ -61,6 +63,10 @@ export default class search extends React.Component {
         })
     }
 
+    movieSelected = (id) => {
+        console.log(`selected movie ID ${id}`)
+    }
+
     displayMore = async () => {
         if (this.state.totalPages === 1) return
         if (this.state.nextPage === this.state.totalPages) return
@@ -89,7 +95,7 @@ export default class search extends React.Component {
                 <Text>Results found: {this.state.totalResults}</Text>
                 <FlatList
                     data={this.state.movies}
-                    renderItem={renderItem}
+                    renderItem={renderItem(this.movieSelected)}
                     keyExtractor={(item) => item.id}
                     onEndReached={this.displayMore}
                 />
