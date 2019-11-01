@@ -1,16 +1,16 @@
 import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from "react-navigation-stack";
 
-import searchScreen from "./screens/search";
-import movieScreen from "./screens/movie";
+import SearchScreen from "./screens/Search";
+import MovieScreen from "./screens/Movie";
 
 const stackNavigator = createStackNavigator(
-    {
-        "Search": searchScreen,
-        "Movie": movieScreen,
-    },
-    {
-        initialRouteName: "Search",
-    }
-)
+  {
+    Search: SearchScreen,
+    Movie: MovieScreen,
+  },
+  {
+    initialRouteName: "Search",
+  }
+);
 export default createAppContainer(stackNavigator);
