@@ -11,6 +11,10 @@ export const getMovieDetails = async (movieID) => {
   return details;
 };
 
+const processMovie = (raw) => ({
+  id: `${raw.imdbID}`,
+  title: `${raw.Title}`,
+});
 export const searchMovies = async (searchString) => {
   const URL = `${URLPrefix}?s=${searchString}${URLSuffix}`;
   const response = await fetch(URL);
@@ -31,10 +35,6 @@ export const searchMovies = async (searchString) => {
   }
 };
 
-const processMovie = (raw) => ({
-  id: `${raw.imdbID}`,
-  title: `${raw.Title}`,
-});
 export const getMoviePage = async (searchString, pageNum) => {
   const URL = `${URLPrefix}?s=${searchString}${URLSuffix}&page=${pageNum}`;
   const response = await fetch(URL);
