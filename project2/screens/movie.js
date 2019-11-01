@@ -6,11 +6,6 @@ import MovieInfo from "./MovieInfo";
 import MoviePoster from "./MoviePoster";
 
 export default class Movie extends React.Component {
-  static navigationOptions = {
-    title: "Movie Details",
-    headerTitleStyle: { color: "#AAAAAF" },
-  };
-
   state = {
     movieID: "",
     Actors: "",

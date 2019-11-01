@@ -6,10 +6,23 @@ import MovieScreen from "./screens/Movie";
 
 const stackNavigator = createStackNavigator(
   {
-    Search: SearchScreen,
-    Movie: MovieScreen,
+    Search: {
+      screen: SearchScreen,
+      navigationOptions: {
+        title: "Search",
+      },
+    },
+    Movie: {
+      screen: MovieScreen,
+      navigationOptions: {
+        title: "Movie Details",
+      },
+    },
   },
   {
+    defaultNavigationOptions: {
+      headerTitleStyle: { color: "#AAAAAF" },
+    },
     initialRouteName: "Search",
   }
 );

@@ -5,11 +5,6 @@ import { searchMovies, getMoviePage } from "../API";
 import renderItem from "./SearchListRenderItem";
 
 export default class Search extends React.Component {
-  static navigationOptions = {
-    title: "Search",
-    headerTitleStyle: { color: "#AAAAAF" },
-  };
-
   state = {
     searchString: "",
     movies: [],
