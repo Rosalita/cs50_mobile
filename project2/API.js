@@ -15,6 +15,7 @@ const processMovie = (raw) => ({
   id: `${raw.imdbID}`,
   title: `${raw.Title}`,
 });
+
 export const searchMovies = async (searchString) => {
   const URL = `${URLPrefix}?s=${searchString}${URLSuffix}`;
   const response = await fetch(URL);
