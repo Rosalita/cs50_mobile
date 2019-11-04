@@ -1,8 +1,9 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, Text } from "react-native";
+import s from "../../Styles";
 
 const MovieInfo = (props) => (
-  <ScrollView style={styles.scroll}>
+  <ScrollView style={s.scroll}>
     <Text>Title: {props.Title}</Text>
     <Text>Year: {props.Year}</Text>
     <Text>Genre: {props.Genre}</Text>
@@ -27,12 +28,5 @@ const MovieInfo = (props) => (
     <Text>Website: {props.Website}</Text>
   </ScrollView>
 );
-
-const styles = StyleSheet.create({
-  scroll: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
-});
 
 export default MovieInfo;

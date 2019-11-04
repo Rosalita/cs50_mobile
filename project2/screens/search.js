@@ -1,117 +1,72 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
-import Constants from "expo-constants";
+import { FlatList, Text, TextInput, View } from "react-native";
 import { searchMovies, getMoviePage } from "../API";
-import renderItem from "./SearchListRenderItem";
+import SearchListItem from "./Search/ListItem";
+import s from "../Styles";
 
-export default class Search extends React.Component {
-  static navigationOptions = {
-    title: "Search",
-    headerTitleStyle: { color: "#AAAAAF" },
-  };
+const Search = () => {
+  const [searchString, setSearchString] = React.useState("");
+  const [movies, setMovies] = React.useState([]);
+  const [totalResults, setTotalResults] = React.useState(0);
+  const [totalPages, setTotalPages] = React.useState(0);
+  const [nextPage, setNextPage] = React.useState(0);
 
-  state = {
-    searchString: "",
-    movies: [],
-    totalResults: 0,
-    totalPages: 0,
-    nextPage: 0,
-  };
+  React.useEffect(() => {
+    const getMovies = async () => {
+      const { result, totalResults, totalPages } = await searchMovies(
+        searchString
+      );
 
-  getMovies = async (searchString) => {
-    const results = await searchMovies(`${searchString}`);
-    console.log(results);
+      if (result) {
+        setMovies(result);
+        setTotalResults(totalResults);
+        setTotalPages(totalPages);
 
-    if (results !== undefined) {
-      this.setState({ movies: results["result"] });
-      this.setState({ totalResults: results["totalResults"] });
-      this.setState({ totalPages: results["totalPages"] });
+        if (totalPages > 1) {
+          setNextPage(2);
+        }
+      }
+    };
 
-      if (results["totalPages"] > 1) {
-        this.setState({ nextPage: 2 });
+    if (searchString !== "") {
+      getMovies();
+    }
+  }, [searchString]);
+
+  const displayMore = async () => {
+    if (totalPages > 1 || nextPage < totalPages) {
+      const results = await getMoviePage(searchString, nextPage);
+
+      if (Array.isArray(results)) {
+        setMovies([...movies, ...results]);
+      }
+
+      if (nextPage < totalPages) {
+        setNextPage(nextPage + 1);
       }
     }
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.searchString !== prevState.searchString) {
-      this.getMovies(this.state.searchString);
-    }
-  }
+  return (
+    <View style={s.appContainer}>
+      <Text>Find a movie</Text>
+      <TextInput
+        style={s.searchInput}
+        value={searchString}
+        onChangeText={setSearchString}
+      />
 
-  updateSearch = (searchString) => {
-    this.setState({
-      searchString: searchString,
-      movies: [],
-      totalResults: 0,
-      totalPages: 0,
-      nextPage: 0,
-    });
-  };
+      <Text>Results found: {totalResults}</Text>
+      <FlatList
+        onEndReached={displayMore}
+        data={movies}
+        renderItem={({ item }) => (
+          <SearchListItem id={item.id} title={item.title} />
+        )}
+        keyExtractor={(item, i) => `${item.id}-${i}`}
+      />
+    </View>
+  );
+};
 
-  movieSelected = (id) => {
-    this.props.navigation.navigate("Movie", { MovieID: id });
-  };
-
-  displayMore = async () => {
-    if (this.state.totalPages === 1) return;
-    if (this.state.nextPage === this.state.totalPages) return;
-
-    const results = await getMoviePage(
-      this.state.searchString,
-      this.state.nextPage
-    );
-
-    if (results !== undefined) {
-      this.setState((prevState) => ({
-        movies: [...prevState.movies, ...results],
-      }));
-
-      if (this.state.nextPage < this.state.totalPages) {
-        this.setState({ nextPage: this.state.nextPage++ });
-      }
-    }
-  };
-
-  render() {
-    return (
-      <View style={styles.appContainer}>
-        <Text>Find a movie</Text>
-        <TextInput
-          style={styles.searchInput}
-          value={this.state.searchString}
-          onChangeText={this.updateSearch}
-        />
-
-        <Text>Results found: {this.state.totalResults}</Text>
-        <FlatList
-          onEndReached={this.displayMore}
-          data={this.state.movies}
-          renderItem={renderItem(this.movieSelected)}
-          keyExtractor={(item, i) => `${item.id}-${i}`}
-        />
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  appContainer: {
-    flex: 1,
-    backgroundColor: "#AAAAAF",
-    paddingTop: Constants.statusBarHeight,
-    width: "100%",
-  },
-  searchInput: {
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "black",
-    minWidth: 200,
-    marginTop: 20,
-    marginBottom: 20,
-    marginHorizontal: 20,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 3,
-  },
-});
+export default Search;
